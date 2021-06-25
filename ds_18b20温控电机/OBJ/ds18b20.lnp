@@ -1,0 +1,8 @@
+".\OBJ\STARTUP.obj",
+".\OBJ\main.obj",
+".\OBJ\1602.obj",
+".\OBJ\dev_l298n.obj",
+".\OBJ\ds18b20.obj",
+".\OBJ\timer.obj" 
+TO ".\OBJ\ds18b20" 
+PRINT(".\ds18b20.m51")

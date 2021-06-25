@@ -1,0 +1,46 @@
+C51 COMPILER V9.01   ADC0804                                                               06/25/2021 16:11:41 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE ADC0804
+OBJECT MODULE PLACED IN .\OBJ\adc0804.obj
+COMPILER INVOKED BY: D:\keil 4.0\C51\BIN\C51.EXE src\adc0804.c BROWSE INCDIR(.\include) DEBUG OBJECTEXTEND PRINT(.\adc08
+                    -04.lst) OBJECT(.\OBJ\adc0804.obj)
+
+line level    source
+
+   1          #include "adc0804.h"
+   2          
+   3          uint ad_read()
+   4          {
+   5   1              uint v; 
+   6   1              adcs = 0;
+   7   1              adwr = 1;
+   8   1              _nop_();
+   9   1              adwr = 0;
+  10   1              _nop_();
+  11   1              adwr = 1;
+  12   1              dataIO=0xff;                                             
+  13   1              adrd = 1;
+  14   1              _nop_();
+  15   1              adrd = 0;
+  16   1              _nop_();
+  17   1              v = dataIO;
+  18   1              adrd = 1;
+  19   1              v = (v/255.0)*5000;
+  20   1      
+  21   1              return v;
+  22   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     58    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

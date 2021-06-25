@@ -1,0 +1,7 @@
+"E:\单片机\单片机程序\温控电机\OBJ\main.obj",
+"E:\单片机\单片机程序\温控电机\OBJ\1602.obj",
+"E:\单片机\单片机程序\温控电机\OBJ\dev_l298n.obj",
+"E:\单片机\单片机程序\温控电机\OBJ\timer.obj",
+"E:\单片机\单片机程序\温控电机\OBJ\ds18b20.obj" 
+TO "E:\单片机\单片机程序\温控电机\OBJ\ttemp" 
+PRINT(".\ttemp.m51")

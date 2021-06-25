@@ -1,0 +1,137 @@
+C51 COMPILER V9.01   DS18B20                                                               06/25/2021 15:35:33 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE DS18B20
+OBJECT MODULE PLACED IN .\OBJ\ds18b20.obj
+COMPILER INVOKED BY: D:\keil 4.0\C51\BIN\C51.EXE src\ds18b20.c BROWSE INCDIR(.\include) DEBUG OBJECTEXTEND PRINT(.\ds18b
+                    -20.lst) OBJECT(.\OBJ\ds18b20.obj)
+
+line level    source
+
+   1          #include <reg52.h>
+   2          #include "ds18b20.h"
+   3          
+   4          sbit DS=P2^2;           //define interface
+   5          
+   6          void delay(uint count)      //delay
+   7          {
+   8   1        uint i;
+   9   1        while(count)
+  10   1        {
+  11   2          i=200;
+  12   2          while(i>0)
+  13   2          i--;
+  14   2          count--;
+  15   2        }
+  16   1      }
+  17          void dsreset(void)       //send reset and initialization command
+  18          {
+  19   1        uint i;
+  20   1        DS=0;
+  21   1        i=103;
+  22   1        while(i>0)i--;
+  23   1        DS=1;
+  24   1        i=4;
+  25   1        while(i>0)i--;
+  26   1      }
+  27          
+  28          bit tmpreadbit(void)       //read a bit
+  29          {
+  30   1         uint i;
+  31   1         bit dat;
+  32   1         DS=0;i++;          //i++ for delay
+  33   1         DS=1;i++;i++;
+  34   1         dat=DS;
+  35   1         i=8;while(i>0)i--;
+  36   1         return (dat);
+  37   1      }
+  38          
+  39          uchar tmpread(void)   //read a byte date
+  40          {
+  41   1        uchar i,j,dat;
+  42   1        dat=0;
+  43   1        for(i=1;i<=8;i++)
+  44   1        {
+  45   2          j=tmpreadbit();
+  46   2          dat=(j<<7)|(dat>>1);   //读出的数据最低位在最前面，这样刚好一个字节在DAT里
+  47   2        }
+  48   1        return(dat);
+  49   1      }
+  50          
+  51          void tmpwritebyte(uchar dat)   //write a byte to ds18b20
+  52          {
+  53   1        uint i;
+  54   1        uchar j;
+C51 COMPILER V9.01   DS18B20                                                               06/25/2021 15:35:33 PAGE 2   
+
+  55   1        bit testb;
+  56   1        for(j=1;j<=8;j++)
+  57   1        {
+  58   2          testb=dat&0x01;
+  59   2          dat=dat>>1;
+  60   2          if(testb)     //write 1
+  61   2          {
+  62   3            DS=0;
+  63   3            i++;i++;
+  64   3            DS=1;
+  65   3            i=8;while(i>0)i--;
+  66   3          }
+  67   2          else
+  68   2          {
+  69   3            DS=0;       //write 0
+  70   3            i=8;while(i>0)i--;
+  71   3            DS=1;
+  72   3            i++;i++;
+  73   3          }
+  74   2      
+  75   2        }
+  76   1      }
+  77          
+  78          void tmpchange(void)  //DS18B20 begin change
+  79          {
+  80   1        dsreset();
+  81   1        delay(1);
+  82   1        tmpwritebyte(0xcc);  // address all drivers on bus
+  83   1        tmpwritebyte(0x44);  //  initiates a single temperature conversion
+  84   1      }
+  85          
+  86          uint tmp()               //get the temperature
+  87          {
+  88   1        float tt;
+  89   1        uint temp;
+  90   1        uchar a,b;
+  91   1        dsreset();
+  92   1        delay(1);
+  93   1        tmpwritebyte(0xcc);
+  94   1        tmpwritebyte(0xbe);
+  95   1        a=tmpread();
+  96   1        b=tmpread();
+  97   1        temp=b;
+  98   1        temp<<=8;             //two byte  compose a int variable
+  99   1        temp=temp|a;
+ 100   1        tt=temp*0.0625;
+ 101   1        temp=tt*10+0.5;
+ 102   1        return temp;
+ 103   1      }
+ 104          
+ 105          uint get_tmp()
+ 106          {
+ 107   1              tmpchange();
+ 108   1              return tmp();
+ 109   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    296    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+C51 COMPILER V9.01   DS18B20                                                               06/25/2021 15:35:33 PAGE 3   
+
+   DATA SIZE        =   ----       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       2
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
