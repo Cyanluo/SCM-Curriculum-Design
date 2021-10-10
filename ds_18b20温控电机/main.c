@@ -5,16 +5,16 @@
 #include "timer.h"
 
 sbit BEEP = P2^3;
-sbit LED  =	P1^3;
+sbit LED  =	P1^4;
 
 sbit key1 = P3^0;
 sbit key2 = P3^1;
 sbit key3 = P3^2;
 sbit Key_g = P3^7;
 
-bit led_flag = 0;
+bit led_flag = 1;
 
-uint h_threshold = 28, l_threshold = 25;
+float h_threshold = 28.0, l_threshold = 25.0;
 uchar threshold_flag = 0;
 
 enum KEY_MODE
@@ -27,8 +27,8 @@ enum KEY_MODE
 void LED_F()
 {
 	static uchar count = 0;
-
-	if(led_flag && ( count++ >= 100))
+	
+	if(led_flag && ( count++ >= 200))
 	{
 		count = 0;
 		LED = LED == 1 ? 0 : 1;
@@ -117,8 +117,8 @@ int main()
 
 	init_1602();
 	timer0_init(PWM_TIME_TICK);
-	l298n_init();
-	tevent_register("LED", LED_F);
+	//tevent_register("LED", LED_F);
+	l298n_init();	
 	tevent_register("KEY", keydscan);
 	disp_threshold();
 
@@ -131,19 +131,24 @@ int main()
 			if(temp > 40)
 				continue;
 
-			if(temp <= l_threshold || temp >= h_threshold)
+			if(temp >= h_threshold  ||  temp <= l_threshold)
 			{
 				led_flag = 1;
-				BEEP = 0;
 				
 				if(temp <= l_threshold)
 				{
+					if(l_threshold - temp > 1)
+						BEEP = 0;
+
 					set_direction(BACKWOARD);
 	
 					speed = (l_threshold - temp) / l_threshold;				
 				}
 				else
 				{
+					if(temp - h_threshold > 1)
+						BEEP = 0;					
+
 					set_direction(FOREWARD);
 	
 					speed = (temp - h_threshold) / h_threshold;
@@ -153,14 +158,14 @@ int main()
 			}
 			else
 			{
-				led_flag = 0;
-	
-				LED = 1;
+				//led_flag = 0;
+				
+				//LED = 1;
 				BEEP = 1;
 	
 				set_speed(0);
 			}
-	
+
 			write_string(0x80, "Temp:");
 			display_1602(0, temp*10);
 			write_dat(0xDF);
@@ -169,6 +174,7 @@ int main()
 		else
 		{
 			stop();
+			BEEP = 1;
 		}
 
 		switch(key_mode)

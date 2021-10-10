@@ -67,5 +67,7 @@ void set_speed(uchar spd)
 void stop()
 {
 	PWM = 0;
+	IN1 = 0;
+	IN2 = 0;
 	stop_flag = 1;
 }

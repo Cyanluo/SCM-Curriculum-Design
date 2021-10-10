@@ -14,6 +14,7 @@ sbit key3 = P3^2;
 
 bit led_flag = 0;
 
+uchar test = 0;
 uint h_threshold = 50, l_threshold = 30;
 uchar threshold_flag = 0;
 
@@ -55,6 +56,15 @@ void display_temp(float temp)
 	display_1602(0, temp*10);
 	write_dat(0xDF);
 	write_dat(0x43);
+}
+
+void clock()
+{
+	test++;
+	if(test > 60)
+	{
+		test = 0;
+	}
 }
 
 void keydscan() 
@@ -127,6 +137,12 @@ int main()
 
 	init_1602();
 	timer0_init(PWM_TIME_TICK);
+	//timer0_init(1000);
+	//tevent_register("clock", clock);
+//	while(1)
+//	{
+//		display_1602(0x80, test*10);
+//	}
 	l298n_init();
 	tevent_register("LED", LED_F);
 	tevent_register("KEY", keydscan);
@@ -163,7 +179,7 @@ int main()
 					speed = (temp - h_threshold) / h_threshold;
 				}
 				
-				speed > 1 ? set_speed(PWM_T) : set_speed(PWM_T * speed);	
+				speed > 1 ? set_speed(PWM_T) : set_speed(PWM_T * speed * 2);	
 			}
 			else
 			{

@@ -3,8 +3,8 @@
 
 #include "reg51.h"
 
-#define PWM_T 50		// real_time = PWM_T * PWM_TIME_TICK
-#define PWM_TIME_TICK 5  // ms
+#define PWM_T 100		// real_time = PWM_T * PWM_TIME_TICK
+#define PWM_TIME_TICK 1  // ms
 #define FOREWARD 1
 #define BACKWOARD 2
 

@@ -1,11 +1,11 @@
 #include"timer.h"
 
 timer_desc t_event[TEVENT];
-uchar T_H = (uint)(65536 - time_t/ft) / 256;
-uchar T_L = (uint)(65536 - time_t/ft) % 256;
+uchar T_H = (uint)(65536 - time_t/tcy) / 256;
+uchar T_L = (uint)(65536 - time_t/tcy) % 256;
 
 uint times = 1;  // T = times * time_t ms
-uchar time_count = 1;
+uint time_count = 1;
 
 static void timer0_handle()
 {
@@ -34,7 +34,7 @@ void timer0_init(uint time)
 void set_time(uint time)
 {
 	times = time / time_t;
-	time_count = 0;
+	time_count = 1;
 }
 
 int tevent_register(char * name, ptimer fp)

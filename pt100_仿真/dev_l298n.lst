@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   DEV_L298N                                                             06/25/2021 16:11:41 PAGE 1   
+C51 COMPILER V9.01   DEV_L298N                                                             06/28/2021 00:00:08 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE DEV_L298N
@@ -62,7 +62,7 @@ line level    source
   52          void l298n_init()
   53          {               
   54   1              PWM = 0;
-C51 COMPILER V9.01   DEV_L298N                                                             06/25/2021 16:11:41 PAGE 2   
+C51 COMPILER V9.01   DEV_L298N                                                             06/28/2021 00:00:08 PAGE 2   
 
   55   1              set_direction(1);
   56   1              tevent_register("PWM", pwm);
@@ -79,12 +79,14 @@ line level    source
   67          void stop()
   68          {
   69   1              PWM = 0;
-  70   1              stop_flag = 1;
-  71   1      }
+  70   1              IN1 = 0;
+  71   1              IN2 = 0;
+  72   1              stop_flag = 1;
+  73   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    109    ----
+   CODE SIZE        =    113    ----
    CONSTANT SIZE    =      4    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
